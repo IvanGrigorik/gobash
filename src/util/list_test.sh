@@ -168,6 +168,35 @@ function test_list_min_empty_list() {
 }
 readonly -f test_list_min_empty_list
 
+function test_list_max() {
+        local lst
+        lst=$(List) || \
+                assert_fail
+
+        $lst add 5
+        $lst add 10
+        $lst add 1
+        $lst add 33
+
+        local max
+        max=$($lst max) || \
+                assert_fail
+        assert_eq 33 "${max}"
+}
+readonly -f test_list_max
+
+function test_list_max_empty_list() {
+        local lst
+        lst=$(List) || \
+                assert_fail
+
+        $lst max && \
+                assert_fail
+
+        return 0
+}
+readonly -f test_list_max_empty_list
+
 function test_list_is_empty() {
         local lst
         lst=$(List) || \

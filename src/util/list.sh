@@ -133,6 +133,33 @@ function List_min() {
         echo "${min}"
 }
 
+function List_max() {
+        # Find max value (ints only).
+        local ctx; is_ctx "${1}" && ctx="${1}" && shift
+        [ $# -ne 1 ] && { ctx_wn $ctx; return $EC; }
+        local -r lst="${1}"
+        shift 1 || { ctx_wn $ctx; return $EC; }
+
+        local len
+        len=$(List_len $ctx "${lst}") || \
+                { ctx_w $ctx "cannot get len"; return $EC; }
+
+        [ ${len} -eq 0 ] && { ctx_w $ctx "incorrect len"; return $EC; }
+
+        local min=$(List_get $ctx "${lst}" 0)
+        local -i i
+        for (( i=1; i<${len}; i++ )); do
+                local el
+                el=$(List_get $ctx "${lst}" "${i}") || \
+                        { ctx_w $ctx "cannot get an el"; return $EC; }
+                if [ ${min} -lt ${el} ]; then
+                        min=${el}
+                fi
+        done
+
+        echo "${min}"
+}
+
 function List_is_empty() {
         # Return true if the list is empty.
         local ctx; is_ctx "${1}" && ctx="${1}" && shift
